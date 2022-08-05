@@ -14,7 +14,7 @@ const QuioscoProvider = ({children}) => {
     const [pedido, setPedido] = useState([])
     const [nombre, setNombre] = useState('')
     const [total, setTotal] = useState(0)
-
+    let lista = 0 ;
 
     const router = useRouter()
 
@@ -907,15 +907,8 @@ const QuioscoProvider = ({children}) => {
         const categoria = categorias.filter( cat => cat.id === id )
         const productosEnCategoria = productosAux.filter( prod => prod.categoriaId === id)
         // console.log("en click: ", productosEnCategoria);
-        let lista;
-        pedido.forEach(e => {
-            // console.log(e.nombre);
-            // console.log(e.cantidad); // '%20y%20el%20'
-            lista = '%20-' + e.cantidad + '%20' + e.nombre + '%n';
-            
-        })
-        console.log("lista:" , lista);
-
+        
+        
         const data = { categoria: categoria[0], productos: productosEnCategoria }
         // setCategoriaActual(categoria[0]) --old version
         setCategoriaActual(data)  
@@ -1392,10 +1385,26 @@ const QuioscoProvider = ({children}) => {
 
             toast.success('Pedido Realizado Correctamente')
             let url = 'https://api.whatsapp.com/send?phone=541168640728&text=Hola!%20Mi%20nombre%20es:%20'
-
-            setTimeout(() => {
-                router.push( url + '%20'+ nombre + '%20y%20mi%20pedido%20es:%20'+ '%20[%20*%20' + pedido[0].cantidad + '%20' + pedido[0].nombre + '%20]%20%20---%20Total:%20$' + total );
-            }, 1000)
+            let infoPedido = '';
+              
+            if (pedido.length >= 2){
+                
+                pedido.forEach( e => {
+                    //console.log("data:", e.nombre );
+                    infoPedido += '%20[%20*%20' + e.cantidad + '%20' + e.nombre + '%20]%20%20---'
+                })
+                
+                // console.log("resultado", infoPedido);
+                setTimeout(() => {
+                    router.push(url + '%20'+ nombre + '%20y%20mi%20pedido%20es:%20' +  infoPedido + '%20Total:%20$' + total.toFixed(2) );
+                }, 1000)
+                
+            }else {
+                setTimeout(() => {
+                    router.push( url + '%20'+ nombre + '%20y%20mi%20pedido%20es:%20'+ '%20[%20*%20' + pedido[0].cantidad + '%20' + pedido[0].nombre + '%20]%20%20---%20Total:%20$' + total.toFixed(2) );
+                }, 1000)
+            }
+            
 
         } catch (error) {
             console.log(error)
