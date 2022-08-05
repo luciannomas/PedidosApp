@@ -907,6 +907,14 @@ const QuioscoProvider = ({children}) => {
         const categoria = categorias.filter( cat => cat.id === id )
         const productosEnCategoria = productosAux.filter( prod => prod.categoriaId === id)
         // console.log("en click: ", productosEnCategoria);
+        let lista;
+        pedido.forEach(e => {
+            // console.log(e.nombre);
+            // console.log(e.cantidad); // '%20y%20el%20'
+            lista = '%20-' + e.cantidad + '%20' + e.nombre + '%n';
+            
+        })
+        console.log("lista:" , lista);
 
         const data = { categoria: categoria[0], productos: productosEnCategoria }
         // setCategoriaActual(categoria[0]) --old version
@@ -1383,10 +1391,10 @@ const QuioscoProvider = ({children}) => {
 
 
             toast.success('Pedido Realizado Correctamente')
-            console.log("pedido: ", pedido);
+            let url = 'https://api.whatsapp.com/send?phone=541168640728&text=Hola!%20Mi%20nombre%20es:%20'
 
             setTimeout(() => {
-                router.push('https://api.whatsapp.com/send?phone=541168640728&text=Hola!%20Mi%20pedido%20es:%20' + pedido[0] + '%20y%20el%20total:%20$' + total );
+                router.push( url + '%20'+ nombre + '%20y%20mi%20pedido%20es:%20'+ '%20[%20*%20' + pedido[0].cantidad + '%20' + pedido[0].nombre + '%20]%20%20---%20Total:%20$' + total );
             }, 1000)
 
         } catch (error) {
